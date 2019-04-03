@@ -77,7 +77,7 @@ CREATE TABLE `Savants`
  `mort_date_certitude`      binary(1) NOT NULL COMMENT 'Sommes-nous certains de l’année de décès ?' ,
  `mort_date_comment`        varchar(45) NOT NULL COMMENT 'En cas d’incertitude sur l’année de décès quelle est cette incertitude ?' ,
  `naissance_lieu`           varchar(45) NOT NULL COMMENT 'Lieu de naissance' ,
- `mort_lieu`                varchar(45) NOT NULL COMMENT 'Lieu de décès' ,
+ `mort_lieu`                varchar(50) NOT NULL COMMENT 'Lieu de décès' ,
  `pays_principal`           varchar(45) COMMENT 'Pays dans lequel le savant a exercé l’essentiel de ses activités' ,
  `pays_2`                   varchar(45) COMMENT 'Autre pays dans lequel a vécu le savant.' ,
  `pays_3`                   varchar(45) COMMENT 'Autre pays dans lequel a vécu le savant.' ,
