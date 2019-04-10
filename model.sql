@@ -69,7 +69,7 @@ CREATE TABLE `Savants`
  `id_savant`                integer NOT NULL COMMENT 'Numéro du savant' ,
  `type_savant`              char(1) NOT NULL COMMENT 'Type de savant : A (grand savant) ou B (petit savant)' ,
  `nom`                      varchar(45) NOT NULL COMMENT 'Nom du savant' ,
- `prenom`                   varchar(45) NOT NULL COMMENT 'Prénom du savant' ,
+ `prenom`                   varchar(60) NOT NULL COMMENT 'Prénom du savant' ,
  `naissance_date`           smallint NOT NULL COMMENT 'Année de naissance' ,
  `naissance_date_certitude` binary(1) NOT NULL COMMENT 'Sommes-nous certains de l’année de naissance ? 0 pour non, 1 pour oui' ,
  `naissance_date_comment`   varchar(45) COMMENT 'En cas d’incertitude sur l’année de naissance, quelle est cette incertitude ?' ,

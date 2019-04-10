@@ -78,7 +78,7 @@ for index, row in dataA1.iterrows():
 		type_eminence = 3
 	else:
 		print("Prob about eminence type with ", id_savant, str(row['AA et AAA']))
-		type_eminence = 0
+		type_eminence = 5
 
 		
 	printout += '(\'' + id_savant + '\', \'A\',\'' + name + '\', \'' +\

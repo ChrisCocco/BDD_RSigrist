@@ -1640,6 +1640,6 @@ INSERT INTO Savants (id_savant, type_savant, nom, prenom, naissance_date, naissa
 ('1639', 'A','Triewald', 'Marten',1691,1,'',1747,1,'', 'Stockholm', 'Stockholm', 'mécanique',2,1,3),
 ('1640', 'A','Turner', 'Dawson',1775,1,'',1858,1,'', 'Great Yarmouth (Norfolk)', 'Londres', 'botanique',2,1,3),
 ('1641', 'A','Cacciatore', 'Niccolo',1780,1,'',1841,1,'', 'Girgenti (c.) (Sicile)', 'Palerme', 'astronomie',2,1,3),
-('1642', 'A','Ozereckovskij', 'Nicolaï Iakovlevich',1750,1,'',1827,1,'', 'Moscou', 'nan', 'histoire naturelle',2,0,0),
+('1642', 'A','Ozereckovskij', 'Nicolaï Iakovlevich',1750,1,'',1827,1,'', 'Moscou', 'nan', 'histoire naturelle',2,0,5),
 ('1643', 'A','Hällström', 'Gustaf Gabriel',1775,1,'',1844,1,'', 'Ilmola / Vaasa (Finlande)', 'Helsinki', 'physique (chaleur, acoustique)',2,1,3),
 ('1644', 'A','Rudberg', 'Fredrik',1800,1,'',1839,1,'', 'Norrköping', 'Uppsala', 'physique (magnétisme, lumière, chaleur)',2,1,3)
