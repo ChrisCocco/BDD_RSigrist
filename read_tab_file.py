@@ -5,8 +5,16 @@ import re
 
 
 dfsA1  = pd.read_html('DATA/BaseA1.htm', header = 0)
+dfsA2  = pd.read_html('DATA/BaseA2.htm', header = 0)
 
-dataA1 = dfsA1[0]    
+dataA1 = dfsA1[0]
+dataA2 = dfsA2[0]
+
+#dataA  = pd.concat([dataA1, dataA2], sort = False)
+# Two columns do not have the same name in both databases: 
+# "Corrections" for A1 and "Corr. BMS" for A2 (no prob, not used)
+
+dataA = dataA1
 
 
 # print(dataA1.loc[:,"Numéro"])
@@ -22,7 +30,7 @@ printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"mort_date, mort_date_certitude, mort_date_comment, naissance_lieu,"+\
 	"mort_lieu, discipl_1, nbre_acad, gasc, id_type_eminence) VALUES\n"
 
-for index, row in dataA1.iterrows():
+for index, row in dataA.iterrows():
 
 	id_savant = str(row['Numéro']).zfill(4)
 
@@ -61,7 +69,11 @@ for index, row in dataA1.iterrows():
 	discipl_1   = discipl_1.replace("'", "\\\'")
 	# discipl_2, etc.
 
-	nbre_acad   = str(int(row['Nbre acad.']))
+	try:
+		nbre_acad   = str(int(row['Nbre acad.']))
+	except:
+		print("Prob about nbre_acad with ", id_savant, row['Nbre acad.'])
+		nbre_acad   = str(99) # TO MODIFY!!!!!!!!!!!!!!
 
 	if str(row['Gasc.']) == "oui":
 		gasc_bin = 1
@@ -70,11 +82,11 @@ for index, row in dataA1.iterrows():
 	else:
 		print("Prob about Gasc. with ", id_savant)
 
-	if str(row['AA et AAA']) == "non/oui" or str(row['AA et AAA']) == "oui/oui":
+	if str(row['AA et AAA']) == "oui/oui":
 		type_eminence = 1
-	elif str(row['AA et AAA']) == "oui/non":
+	elif str(row['AA et AAA']) == "oui/non" or "oui//non":
 		type_eminence = 2
-	elif str(row['AA et AAA']) == "non/non":
+	elif str(row['AA et AAA']) == "non/non" or "non / non":
 		type_eminence = 3
 	else:
 		print("Prob about eminence type with ", id_savant, str(row['AA et AAA']))
