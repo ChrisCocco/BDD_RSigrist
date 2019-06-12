@@ -147,9 +147,7 @@ for index, row in dataB.iterrows():
 		firstname = str(row['Prénom'])
 		firstname = firstname.replace("'", "\\\'")
 	else:
-		firstname = "xxx"
-		print("Prob about firstname with ", id_savant, "B", row['Prénom'], 
-			"xxx introduced")
+		firstname = "NULL"
 
 	born_date = str(row['Né'])
 	if re.match('^[0-9]{4}$', born_date):
@@ -171,11 +169,12 @@ for index, row in dataB.iterrows():
 			death_comment   = death_date[5:] #Could be improved
 			death_date      = death_date[0:4]
 	else:
-		death_date = "0000"
+		death_date = 'NULL'
 		death_date_cert = str(0)
-		death_comment   = 'NULL'
-		print("Prob about death date with ", id_savant, "B", row['Mort'], 
-			"0000 introduced")
+		if int(id_savant) > 5000:
+			death_comment = "ap." + born_date
+		else:
+			death_comment   = 'NULL'
 
 
 	born_place  = str(row['Lieu naiss.'])
@@ -208,11 +207,8 @@ for index, row in dataB.iterrows():
 
 	if str(row['Source 1']) == "Gasc.":
 		gasc_bin = 1
-	elif str(row['Source 1']) != "Gasc." and nbre_acad == "0":
-		gasc_bin = 0
 	else:
-		print("Prob about Gasc. with ", id_savant, "B,", "0 introduced")
-		gasc_bin = 0 #even if wrong, just to go on with the process
+		gasc_bin = 0
 
 	type_eminence = 4
 	
