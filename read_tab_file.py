@@ -16,7 +16,7 @@ dataA2 = dfsA2[0]
 dataB1 = dfsB1[0]
 dataB2 = dfsB2[0]
 
-dataA  = pd.concat([dataA1, dataA2], sort = False)
+dataA  = pd.concat([dataA1, dataA2], sort = False, ignore_index = True)
 # Two columns do not have the same name in both databases: 
 # "Corrections" for A1 and "Corr. BMS" for A2 (no prob, not used)
 
@@ -26,7 +26,7 @@ dataA  = pd.concat([dataA1, dataA2], sort = False)
 dataB2.rename(columns = {"Pays":"Pays 1"}, inplace = True)
 # Eleven columns still not have the same name (Pays corrected), maybe to 
 # correct later depending on the useful columns
-dataB  = pd.concat([dataB1, dataB2], sort = False)
+dataB  = pd.concat([dataB1, dataB2], sort = False, ignore_index = True)
 
 
 # print(dataA1.loc[:,"Numéro"])
@@ -68,13 +68,20 @@ for index, row in dataA.iterrows():
 		born_comment   = born_date[5:] #Could be improved
 		born_date      = born_date[0:4] 
 
-	death_date = str(row['Mort'])
+	if isinstance(row['Mort'], float):
+		death_date = str(int(row['Mort']))
+	else:
+		death_date = str(row['Mort'])
+
 	if re.match('^[0-9]{4}$', death_date):
 		death_date_cert = str(1)
 		death_comment   = 'NULL'
 	else:
 		death_date_cert = str(0)
-		death_comment   = death_date[5:] #Could be improved
+		if death_date[4:5] == ' ':
+			death_comment   = death_date[5:]
+		else:
+			death_comment   = death_date[4:]
 		death_date      = death_date[0:4]
 
 	born_place  = str(row['Lieu naiss.'])
@@ -164,10 +171,19 @@ for index, row in dataB.iterrows():
 		if re.match('^[0-9]{4}$', death_date):
 			death_date_cert = str(1)
 			death_comment   = 'NULL'
-		else:
+		elif re.match('^[0-9]{4}', death_date):
 			death_date_cert = str(0)
-			death_comment   = death_date[5:] #Could be improved
+			if death_date[4:5] == ' ':
+				death_comment   = death_date[5:]
+			else:
+				death_comment   = death_date[4:]
+			death_comment   = death_comment.replace("'", "\\\'")
 			death_date      = death_date[0:4]
+		else:
+			death = re.search('(.+)([0-9]{4})', death_date)
+			death_date = death.group((2))
+			death_date_cert = str(0)
+			death_comment = death.group(1).replace("'", "\\\'")
 	else:
 		death_date = 'NULL'
 		death_date_cert = str(0)
