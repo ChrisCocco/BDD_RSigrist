@@ -162,7 +162,10 @@ for index, row in dataB.iterrows():
 		born_comment   = 'NULL'
 	else:
 		born_date_cert = str(0)
-		born_comment   = born_date[5:] #Could be improved
+		if born_date[4:5] == ' ':
+			born_comment   = born_date[5:]
+		else:
+			born_comment   = born_date[4:]
 		born_comment   = born_comment.replace("'", "\\\'")
 		born_date      = born_date[0:4] 
 
