@@ -2,7 +2,7 @@
 
 import pandas as pd
 import re
-
+import functools # to use "reduce"
 
 dfsA1  = pd.read_html('DATA/BaseA1.htm', header = 0)
 dfsA2  = pd.read_html('DATA/BaseA2.htm', header = 0)
@@ -39,56 +39,103 @@ printout_rel_field = "INSERT INTO Rel_champs_savants (id_savant, type_savant,"+\
 
 dict_field  = dict()
 
-print(list(set(dataA.champ1.unique(),dataA.champ2.unique())))
-
 
 all_fields = set(
 	list(dataA.champ1.unique())+
 	list(dataA.champ2.unique())+
 	list(dataA.champ3.unique())+
-	list(dataA.champ4.unique())+
+	[item for sublist in 
+		[item.split(" @ ") for item in dataA.champ4.unique() if not pd.isna(item)] 
+		for item in sublist
+	] +
 	list(dataB['Champ 1'].unique())+
 	list(dataB['Champ 2'].unique())+
-	list(dataB['Champ 3'].unique())
+	[item for sublist in 
+		[item.split(" @ ") for item in dataB['Champ 3'].unique() if not pd.isna(item)] 
+		for item in sublist
+	]
 	)
 
 accents = (u'\x92', u"'"), ('é', 'e'), ('è', 'e'), ('â', 'a'), ('ö', 'o'), \
 		('ü', 'u'), ("(",""), (")","")
 
-import functools # to use "reduce"
-
-
-
-for item in all_fields:
-	if not pd.isna(item):
-		print(item.replace("(",""))
-		print(functools.reduce(
-				lambda a, kv: a.replace(*kv), accents, item
-				))
 
 all_fields = [functools.reduce(
 				lambda a, kv: a.replace(*kv), accents, field
 				) 
 				for field in all_fields if not pd.isna(field)]
 
-# len(set(
-# 	list(dataA.champ1.unique())+
-# 	list(dataA.champ2.unique())+
-# 	list(dataA.champ3.unique())+
-# 	list(dataA.champ4.unique())+
-# 	list(dataB['Champ 1'].unique())+
-# 	list(dataB['Champ 2'].unique())+
-# 	list(dataB['Champ 3'].unique())
-# 	))
+all_fields = [field.lower() for field in all_fields]
 
-# remove accents
-# remove brackets 
-# Levenshtein Distance: 
-# https://stackabuse.com/levenshtein-distance-and-text-similarity-in-python/
+all_fields = list(set(all_fields))
+
 # https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Python
-# https://pypi.org/project/python-Levenshtein/0.12.0/
-# https://pypi.org/project/jellyfish/
-# https://www.python-course.eu/levenshtein_distance.php
+def levenshtein(s1, s2):
+	if len(s1) < len(s2):
+		return levenshtein(s2, s1)
+	# len(s1) >= len(s2)
+	if len(s2) == 0:
+		return len(s1)
+	previous_row = range(len(s2) + 1)
+	for i, c1 in enumerate(s1):
+		current_row = [i + 1]
+		for j, c2 in enumerate(s2):
+			insertions = previous_row[j + 1] + 1 # j+1 instead of j since previous_row and current_row are one character longer
+			deletions = current_row[j] + 1       # than s2
+			substitutions = previous_row[j] + (c1 != c2)
+			current_row.append(min(insertions, deletions, substitutions))
+		previous_row = current_row
+	return previous_row[-1]
+
+double_set = set()
+
+for i in range(len(all_fields)):
+	for j in range(i+1, len(all_fields)):
+		leven_dist = levenshtein(all_fields[i], all_fields[j])
+
+		if leven_dist < 2:
+			print(all_fields[i], all_fields[j])
+			double_set.add(all_fields[j])
+
+
+print(double_set)
+
+all_fields = [field for field in all_fields if field not in double_set]
+
+print(all_fields)
+
+# ['physique th.', 'physique maths', 'science de la terre', 'biomed', 'tehcniques', 'sciences de la terr', 'astronomie @ biomed', 'physique math. et exper.', 'pluridisciplinaire', 'physique exp.', 'sciencesen general', 'physique theorique', 'histoire naturelle @ biomed', 'sciences en genreal', 'maths', 'physique exper.', 'histoie naturelle', 'physique @ astronomie', 'physique experimentale', 'hist-philo-pedago', 'physique theor.', 'scoemces en general', 'physique generale', 'hist - philo - pedago', 'terre', 'biomed @ histoire naturelle', 'theologie', 'sciences sociales', 'geologie', 'biologie', 'philosophie', 'lettres', 'chimie', 'techniques', 'physique', 'astronomie', 'philo', 'agronomie']
+
+manual_list_fields = [
+	'physique théorique', 
+	'physique maths', 
+	'sciences de la terre', 
+	'biomed', 
+	'techniques', 
+	'astronomie @ biomed', 
+	'physique math. et exper.', 
+	'pluridisciplinaire', 
+	'physique expérimentale', 
+	'sciences en général', 
+	'histoire naturelle @ biomed', 
+	'maths', 
+	'histoire naturelle', 
+	'physique @ astronomie', 
+	'hist-philo-pedago', # à regrouper avec philo selon proposition René? Mais philosphie avec philo aussi?
+	'physique générale', 
+	'terre', 
+	'théologie', 
+	'sciences sociales', 
+	'géologie', 
+	'biologie', 
+	'philosophie', 
+	'lettres', 
+	'chimie', 
+	'physique', 
+	'astronomie', 
+	'philo', 
+	'agronomie']
+
 
 #################
 #### A bases ####
