@@ -87,6 +87,50 @@ def levenshtein(s1, s2):
 		previous_row = current_row
 	return previous_row[-1]
 
+def retrieve_field(field_name, dict_field_list):
+	if "(" not in field_name:
+		interpret = 0
+	else:
+		interpret = 1
+
+	field_name = functools.reduce(
+		lambda a, kv: a.replace(*kv), accents, field_name)
+
+	if field_name in dict_field_list:
+		id_field = dict_field_list[field_name]
+	# to check if "x @ y" instead of "y @ x"
+	elif "@" in field_name and \
+		field_name.split(" @ ")[1] + " @ " + field_name.split(" @ ")[0] \
+		in dict_field_list:
+		id_field = dict_field_list[field_name.split(" @ ")[1] +\
+			" @ " + field_name.split(" @ ")[0]]
+	elif field_name == "physique exper" or field_name == "physique exp":
+		id_field = dict_field_list["physique experimentale"]
+	elif field_name == "biologie":
+		id_field = dict_field_list["biomed"]
+	elif field_name == "physique th" or field_name == "physique theor":
+		id_field = dict_field_list["physique theorique"]
+	elif field_name == "philo" or field_name == "hist-philo-pedago" or \
+		field_name == "hist - philo - pedago":
+		id_field = dict_field_list["philosophie"]
+	else:
+		dict_leven = dict()
+		for field_saved, id_field in dict_field_list.items():
+			leven_dist = levenshtein(field_name, field_saved)
+			dict_leven[id_field] = leven_dist
+			# if leven_dist < 2:
+			# 	id_field = dict_field[field_saved]				
+		dist_min = min(dict_leven.values())
+		id_found = [
+			id_field for id_field, dist in dict_leven.items() 
+			if dist == dist_min
+			]
+		if len(id_found) == 1 and dist_min <= 2:
+			id_field = id_found[0]
+		else:
+			print("Not in the list: ", field_name)
+	return(interpret, id_field)
+
 # double_set = set()
 
 # for i in range(len(all_fields)):
@@ -153,7 +197,7 @@ manual_list_fields = [
 	'physique expérimentale', # regrouper avec physique exp et physique exper
 	'physique générale', 
 	'physique math. et exper.', 
-	'physique maths', 
+	'physique math.', 
 	'physique théorique', # regrouper avec phyisique th, physique theor
 	'pluridisciplinaire', 
 	'sciences de la terre', 
@@ -180,30 +224,26 @@ for index, row in dataA.iterrows():
 	id_savant = str(row['Numéro']).zfill(4)
 
 	if pd.notna(row['champ1']):
+
 		field = str(row['champ1'])
 
 		principal_field = 1
 
-		if "(" not in field:
-			interpret = 0
-		else:
-			interpret = 1
+		interpretation, id_field = retrieve_field(field, dict_field)
 
-		field = functools.reduce(lambda a, kv: a.replace(*kv), accents, field)
+		printrow = '(\'' + id_savant + '\', \'A\',' + str(id_field) + ',' +\
+				 	str(interpretation) + ',' + str(principal_field) + '),\n'
 
-		if field in dict_field:
-			id_field = dict_field[field]
-		# to check if "x @ y" instead of "y @ x"
-		elif "@" in field and \
-			field.split(" @ ")[1] + " @ " + field.split(" @ ")[0] in dict_field:
+		printout_rel_field += printrow
 
-			id_field = dict_field[field.split(" @ ")[1] +\
-				" @ " + field.split(" @ ")[0]]
-		elif field == "physique exper" or field == "physique exp":
-			id_field = dict_field["physique experimentale"]
-		elif field == "biologie":
-			id_field = dict_field["biomed"]
-		else:
-			print("Not in the list: ", field)
+
+for field, id_field in dict_field.items():
+		printout_field += '(' + str(id_field) + ', \'' + field + '\'),\n'
+
+# print(printout)
+with open("data_for_sql/champs_savants.sql", mode = "w", encoding = "utf8") as f:
+	f.write(printout_field[:-2]) #-2 to remove the last ",\n"
+	f.write(';\n\n')
+	f.write(printout_rel_field[:-2]) #-2 to remove the last ",\n"
 
 

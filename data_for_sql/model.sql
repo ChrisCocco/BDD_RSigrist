@@ -55,7 +55,7 @@ PRIMARY KEY (`id_type_eminence`)
 CREATE TABLE `Champs`
 (
  `id_champ` tinyint unsigned NOT NULL COMMENT 'Identifiant du champ' ,
- `champ`    varchar(20) NOT NULL COMMENT 'Champ de travail du savant (équivalent à la catégorie DSB pour les savants de type A)' ,
+ `champ`    varchar(40) NOT NULL COMMENT 'Champ de travail du savant (équivalent à la catégorie DSB pour les savants de type A)' ,
 
 PRIMARY KEY (`id_champ`)
 );
