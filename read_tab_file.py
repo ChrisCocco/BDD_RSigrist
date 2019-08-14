@@ -40,7 +40,8 @@ printout   = str()
 printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"naissance_date, naissance_date_certitude, naissance_date_comment," +\
 	"mort_date, mort_date_certitude, mort_date_comment, naissance_lieu,"+\
-	"mort_lieu, discipl_1, nbre_acad, gasc, id_type_eminence) VALUES\n"
+	"mort_lieu, discipl_1, nbre_acad, gasc, id_type_eminence, pays_principal,"+\
+	"pays_2, pays_3, empire) VALUES\n"
 
 
 #################
@@ -122,6 +123,26 @@ for index, row in dataA.iterrows():
 	else:
 		print("Prob about eminence type with ", id_savant, str(row['AA et AAA']))
 
+	if pd.notna(row['Pays 1']):
+		country_1 = str(row['Pays 1'])
+	else:
+		country_1 = 'NULL'
+
+	if pd.notna(row['Pays 2']):
+		country_2 = str(row['Pays 2'])
+	else:
+		country_2 = 'NULL'
+
+	if pd.notna(row['Pays 3']):
+		country_3 = str(row['Pays 3'])
+	else:
+		country_3 = 'NULL'
+
+	if pd.notna(row['Empire']):
+		empire    = str(row['Empire'])
+	else:
+		empire    = 'NULL'
+
 		
 	printrow  = '(\'' + id_savant + '\', \'A\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -129,7 +150,8 @@ for index, row in dataA.iterrows():
 				 ',\'' + death_comment + '\', \'' + born_place + '\', \'' +\
 				 death_place + '\', \'' + discipl_1 + '\',' +\
 				 nbre_acad + ',' + str(gasc_bin) + ',' + str(type_eminence) +\
-				 '),\n'
+				 ', \'' + country_1 + '\', \'' + country_2 + '\', \'' +\
+				 country_3 + '\', \'' + empire + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
@@ -230,7 +252,23 @@ for index, row in dataB.iterrows():
 		gasc_bin = 0
 
 	type_eminence = 4
-	
+
+	if pd.notna(row['Pays 1']):
+		country_1 = str(row['Pays 1'])
+	else:
+		country_1 = 'NULL'
+
+	if pd.notna(row['Pays 2']):
+		country_2 = str(row['Pays 2'])
+	else:
+		country_2 = 'NULL'
+
+	country_3 = 'NULL'
+
+	if pd.notna(row['Empire']):
+		empire    = str(row['Empire'])
+	else:
+		empire    = 'NULL'
 
 		
 	printrow  = '(\'' + id_savant + '\', \'B\',\'' + name + '\', \'' +\
@@ -239,7 +277,8 @@ for index, row in dataB.iterrows():
 				 ',\'' + death_comment + '\', \'' + born_place + '\', \'' +\
 				 death_place + '\', \'' + discipl_1 + '\',' +\
 				 nbre_acad + ',' + str(gasc_bin) + ',' + str(type_eminence) +\
-				 '),\n'
+				 ', \'' + country_1 + '\', \'' + country_2 + '\', \'' +\
+				 country_3 + '\', \'' + empire + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
