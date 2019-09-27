@@ -41,7 +41,7 @@ printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"naissance_date, naissance_date_certitude, naissance_date_comment," +\
 	"mort_date, mort_date_certitude, mort_date_comment, naissance_lieu,"+\
 	"mort_lieu, discipl_1, nbre_acad, gasc, id_type_eminence, pays_principal,"+\
-	"pays_2, pays_3, empire) VALUES\n"
+	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4) VALUES\n"
 
 
 #################
@@ -143,6 +143,31 @@ for index, row in dataA.iterrows():
 	else:
 		empire    = 'NULL'
 
+
+	if pd.notna(row['Lieu 1']):
+		place_1   = str(row['Lieu 1'])
+		place_1   = place_1.replace("'", "\\\'")
+	else:
+		place_1   = 'NULL'
+
+	if pd.notna(row['Lieu 2']):
+		place_2   = str(row['Lieu 2'])
+		place_2   = place_2.replace("'", "\\\'")
+	else:
+		place_2   = 'NULL'
+
+	if pd.notna(row['Lieu 3']):
+		place_3   = str(row['Lieu 3'])
+		place_3   = place_3.replace("'", "\\\'")
+	else:
+		place_3   = 'NULL'
+
+	if pd.notna(row['Lieu 4']):
+		place_4   = str(row['Lieu 4'])
+		place_4   = place_4.replace("'", "\\\'")
+	else:
+		place_4   = 'NULL'
+
 		
 	printrow  = '(\'' + id_savant + '\', \'A\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -151,7 +176,9 @@ for index, row in dataA.iterrows():
 				 death_place + '\', \'' + discipl_1 + '\',' +\
 				 nbre_acad + ',' + str(gasc_bin) + ',' + str(type_eminence) +\
 				 ', \'' + country_1 + '\', \'' + country_2 + '\', \'' +\
-				 country_3 + '\', \'' + empire + '\'),\n'
+				 country_3 + '\', \'' + empire + '\', \'' + place_1 + \
+				 '\', \'' + place_2 + '\', \'' + place_3 + '\', \'' + \
+				 place_4 +'\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
@@ -270,6 +297,45 @@ for index, row in dataB.iterrows():
 	else:
 		empire    = 'NULL'
 
+	places  = []
+	place_1 = place_2 = place_3 = place_4 = 'NULL'
+	
+	if pd.notna(row['Ville 1']):
+		place_1_temp = str(row['Ville 1'])
+		places.extend(
+			re.split(r'& (?=[A-Z])|; (?=[A-Z])|@ (?=[A-Z])', place_1_temp)
+			)
+	if pd.notna(row['Ville 2']):
+		place_2_temp = str(row['Ville 2'])
+		places.extend(
+			re.split(r'& (?=[A-Z])|; (?=[A-Z])|@ (?=[A-Z])', place_2_temp)
+			)
+	if pd.notna(row['Ville 3']):
+		place_3_temp = str(row['Ville 3'])
+		places.extend(
+			re.split(r'& (?=[A-Z])|; (?=[A-Z])|@ (?=[A-Z])', place_3_temp)
+			)
+
+	if len(places) == 0:
+		place_1 = place_2 = place_3 = place_4 = 'NULL'
+	else:
+		place_1 = places[0]
+		place_1   = place_1.replace("'", "\\\'")
+		if len(places) > 1:
+			place_2 = places[1]
+			place_2   = place_2.replace("'", "\\\'")
+			if len(places) > 2:
+				place_3 = places[2]
+				place_3   = place_3.replace("'", "\\\'")
+				if len(places) > 3:
+					place_4 = places[3]
+					place_4   = place_4.replace("'", "\\\'")
+					if len(places) > 4:
+						print(id_savant, "B: There are too many places")
+
+	#NOT SOLVED FOR PLACES: Remove "----", must be replaced by "NULL" or NOT?
+
+
 		
 	printrow  = '(\'' + id_savant + '\', \'B\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -278,14 +344,15 @@ for index, row in dataB.iterrows():
 				 death_place + '\', \'' + discipl_1 + '\',' +\
 				 nbre_acad + ',' + str(gasc_bin) + ',' + str(type_eminence) +\
 				 ', \'' + country_1 + '\', \'' + country_2 + '\', \'' +\
-				 country_3 + '\', \'' + empire + '\'),\n'
+				 country_3 + '\', \'' + empire + '\', \'' + place_1 + \
+				 '\', \'' + place_2 + '\', \'' + place_3 + '\', \'' + \
+				 place_4 +'\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
 	printrow  = printrow.replace(u'\x92', u"\\\'")
 
 	printout += printrow
-
 
 
 # print(printout)
