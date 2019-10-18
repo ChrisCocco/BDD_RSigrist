@@ -35,6 +35,9 @@ dataB  = pd.concat([dataB1, dataB2], sort = False, ignore_index = True)
 # #print(dataA1["Numéro"] == 1) # => TRUE or FALSE
 # dataA1.loc[lambda df: df.Numéro == 1, :]
 
+# To remove empty row in dataB
+dataB    = dataB[dataB.Nom != "(vide)"]
+
 printout   = str()
 
 printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\

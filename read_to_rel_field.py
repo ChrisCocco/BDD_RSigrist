@@ -79,7 +79,7 @@ def retrieve_field(field_name, dict_field_list):
 			" @ " + field_name.split(" @ ")[0]]
 	elif field_name == "physique exper" or field_name == "physique exp":
 		id_field = dict_field_list["physique experimentale"]
-	elif field_name == "biologie":
+	elif field_name == "biologie" or field_name == "medecine":
 		id_field = dict_field_list["biomed"]
 	elif field_name == "physique th" or field_name == "physique theor":
 		id_field = dict_field_list["physique theorique"]
