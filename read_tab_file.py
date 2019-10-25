@@ -43,7 +43,8 @@ printout   = str()
 printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"naissance_date, naissance_date_certitude, naissance_date_comment," +\
 	"mort_date, mort_date_certitude, mort_date_comment, naissance_lieu,"+\
-	"mort_lieu, discipl_1, nbre_acad, gasc, id_type_eminence, pays_principal,"+\
+	"mort_lieu, discipl_1, discipl_2, discipl_3, discipl_4, discipl_5, "+\
+	"nbre_acad, gasc, id_type_eminence, pays_principal,"+\
 	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4) VALUES\n"
 
 
@@ -102,7 +103,31 @@ for index, row in dataA.iterrows():
 
 	discipl_1   = str(row['Discipl. 1'])
 	discipl_1   = discipl_1.replace("'", "\\\'")
-	# discipl_2, etc.
+
+	if pd.notna(row['Discipl. 2']):
+		discipl_2   = str(row['Discipl. 2'])
+		discipl_2   = discipl_2.replace("'", "\\\'")
+	else:
+		discipl_2	= 'NULL'
+
+	if pd.notna(row['Discipl. 3']):
+		discipl_3   = str(row['Discipl. 3'])
+		discipl_3   = discipl_3.replace("'", "\\\'")
+	else:
+		discipl_3	= 'NULL'
+
+	if pd.notna(row['Discipl. 4']):
+		discipl_4   = str(row['Discipl. 4'])
+		discipl_4   = discipl_4.replace("'", "\\\'")
+	else:
+		discipl_4	= 'NULL'
+
+	if pd.notna(row['Discipl. 5']):
+		discipl_5   = str(row['Discipl. 5'])
+		discipl_5   = discipl_5.replace("'", "\\\'")
+	else:
+		discipl_5	= 'NULL'
+	
 
 	try:
 		nbre_acad   = str(int(row['Nbre acad.']))
@@ -176,7 +201,9 @@ for index, row in dataA.iterrows():
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
 				 born_comment + '\',' + death_date + ',' + death_date_cert +\
 				 ',\'' + death_comment + '\', \'' + born_place + '\', \'' +\
-				 death_place + '\', \'' + discipl_1 + '\',' +\
+				 death_place + '\', \'' + discipl_1 + '\', \'' + discipl_2 + \
+				 '\', \'' + discipl_3 + '\', \'' + discipl_4 + '\', \'' + \
+				 discipl_5 + '\',' +\
 				 nbre_acad + ',' + str(gasc_bin) + ',' + str(type_eminence) +\
 				 ', \'' + country_1 + '\', \'' + country_2 + '\', \'' +\
 				 country_3 + '\', \'' + empire + '\', \'' + place_1 + \
@@ -267,7 +294,26 @@ for index, row in dataB.iterrows():
 		discipl_1   = "xxx"
 		print("Prob about 1st discipline with ", id_savant, "B", 
 			row['Discipl. 1'], "xxx introduced")
-	# discipl_2, etc.
+	
+	if pd.notna(row['Discipl. 2']):
+		discipl_2   = str(row['Discipl. 2'])
+		discipl_2   = discipl_2.replace("'", "\\\'")
+	else:
+		discipl_2	= 'NULL'
+
+	if pd.notna(row['Discipl. 3']):
+		discipl_3   = str(row['Discipl. 3'])
+		discipl_3   = discipl_3.replace("'", "\\\'")
+	else:
+		discipl_3	= 'NULL'
+
+	if pd.notna(row['Discipl. 4']):
+		discipl_4   = str(row['Discipl. 4'])
+		discipl_4   = discipl_4.replace("'", "\\\'")
+	else:
+		discipl_4	= 'NULL'
+
+	discipl_5	= 'NULL'
 
 	try:
 		nbre_acad   = str(int(row['Nbre acad.']))
@@ -344,7 +390,9 @@ for index, row in dataB.iterrows():
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
 				 born_comment + '\',' + death_date + ',' + death_date_cert +\
 				 ',\'' + death_comment + '\', \'' + born_place + '\', \'' +\
-				 death_place + '\', \'' + discipl_1 + '\',' +\
+				 death_place + '\', \'' + discipl_1 + '\', \'' + discipl_2 + \
+				 '\', \'' + discipl_3 + '\', \'' + discipl_4 + '\', \'' + \
+				 discipl_5 + '\',' +\
 				 nbre_acad + ',' + str(gasc_bin) + ',' + str(type_eminence) +\
 				 ', \'' + country_1 + '\', \'' + country_2 + '\', \'' +\
 				 country_3 + '\', \'' + empire + '\', \'' + place_1 + \
