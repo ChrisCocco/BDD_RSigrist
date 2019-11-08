@@ -45,7 +45,8 @@ printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"mort_date, mort_date_certitude, mort_date_comment, naissance_lieu,"+\
 	"mort_lieu, discipl_1, discipl_2, discipl_3, discipl_4, discipl_5, "+\
 	"nbre_acad, gasc, id_type_eminence, pays_principal,"+\
-	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4) VALUES\n"
+	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4, a_paris,"+\
+	"a_londres, a_berlin) VALUES\n"
 
 
 #################
@@ -195,6 +196,24 @@ for index, row in dataA.iterrows():
 		place_4   = place_4.replace("'", "\\\'")
 	else:
 		place_4   = 'NULL'
+        
+	if pd.notna(row['A. Paris']):
+		a_paris   = str(row['A. Paris'])
+		a_paris   = a_paris.replace("'", "\\\'")
+	else:
+		a_paris   = 'NULL'		
+
+	if pd.notna(row['A. Londres']):
+		a_london  = str(row['A. Londres'])
+		a_london  = a_london.replace("'", "\\\'")
+	else:
+		a_london  = 'NULL'
+
+	if pd.notna(row['A. Berlin']):
+		a_berlin  = str(row['A. Berlin'])
+		a_berlin  = a_berlin.replace("'", "\\\'")
+	else:
+		a_berlin  = 'NULL'
 
 		
 	printrow  = '(\'' + id_savant + '\', \'A\',\'' + name + '\', \'' +\
@@ -208,7 +227,8 @@ for index, row in dataA.iterrows():
 				 ', \'' + country_1 + '\', \'' + country_2 + '\', \'' +\
 				 country_3 + '\', \'' + empire + '\', \'' + place_1 + \
 				 '\', \'' + place_2 + '\', \'' + place_3 + '\', \'' + \
-				 place_4 +'\'),\n'
+				 place_4 + '\', \'' + a_paris + '\', \'' + a_london + \
+				 '\', \'' + a_berlin + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
@@ -384,7 +404,23 @@ for index, row in dataB.iterrows():
 
 	#NOT SOLVED FOR PLACES: Remove "----", must be replaced by "NULL" or NOT?
 
+	if pd.notna(row['Ac. Paris']):
+		a_paris   = str(row['Ac. Paris'])
+		a_paris   = a_paris.replace("'", "\\\'")
+	else:
+		a_paris   = 'NULL'
 
+	if pd.notna(row['Ac. Londres']):
+		a_london  = str(row['Ac. Londres'])
+		a_london  = a_london.replace("'", "\\\'")
+	else:
+		a_london  = 'NULL'
+
+	if pd.notna(row['Ac. Berlin']):
+		a_berlin  = str(row['Ac. Berlin'])
+		a_berlin  = a_berlin.replace("'", "\\\'")
+	else:
+		a_berlin  = 'NULL'
 		
 	printrow  = '(\'' + id_savant + '\', \'B\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -397,7 +433,8 @@ for index, row in dataB.iterrows():
 				 ', \'' + country_1 + '\', \'' + country_2 + '\', \'' +\
 				 country_3 + '\', \'' + empire + '\', \'' + place_1 + \
 				 '\', \'' + place_2 + '\', \'' + place_3 + '\', \'' + \
-				 place_4 +'\'),\n'
+				 place_4 + '\', \'' + a_paris + '\', \'' + a_london + \
+				 '\', \'' + a_berlin + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
