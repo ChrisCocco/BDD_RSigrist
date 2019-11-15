@@ -8,8 +8,9 @@ dfsA1  = pd.read_html('DATA/BaseA1.htm', header = 0)
 dfsA2  = pd.read_html('DATA/BaseA2.htm', header = 0)
 
 dfsB1  = pd.read_html('DATA/BaseB1.htm', header = 0)
-dfsB2  = pd.read_html('DATA/BaseB2.htm', header = 0)
-
+dfsB2  = pd.read_html('DATA/BaseB2.htm', header = 0, 
+	converters= {'Ac. Bol.': str}) # To avoid transformation of dates into floats
+ 
 dataA1 = dfsA1[0]
 dataA2 = dfsA2[0]
 
@@ -46,7 +47,7 @@ printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"mort_lieu, discipl_1, discipl_2, discipl_3, discipl_4, discipl_5, "+\
 	"nbre_acad, gasc, id_type_eminence, pays_principal,"+\
 	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4, a_paris,"+\
-	"a_londres, a_berlin) VALUES\n"
+	"a_londres, a_berlin, a_petersb, a_stockh, a_bologne, acad_7) VALUES\n"
 
 
 #################
@@ -215,6 +216,30 @@ for index, row in dataA.iterrows():
 	else:
 		a_berlin  = 'NULL'
 
+	if pd.notna(row['A. Pétersb.']):
+		a_petersb = str(row['A. Pétersb.'])
+		a_petersb = a_petersb.replace("'", "\\\'")
+	else:
+		a_petersb = 'NULL'
+
+	if pd.notna(row['A. Stockh.']):
+		a_stockh  = str(row['A. Stockh.'])
+		a_stockh  = a_stockh.replace("'", "\\\'")
+	else:
+		a_stockh  = 'NULL'
+
+	if pd.notna(row['A. Bologne']):
+		a_bologna = str(row['A. Bologne'])
+		a_bologna = a_bologna.replace("'", "\\\'")
+	else:
+		a_bologna = 'NULL'
+
+	if pd.notna(row['Acad. 7']):
+		acad_7    = str(row['Acad. 7'])
+		acad_7    = acad_7.replace("'", "\\\'")
+	else:
+		acad_7    = 'NULL'
+
 		
 	printrow  = '(\'' + id_savant + '\', \'A\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -228,7 +253,8 @@ for index, row in dataA.iterrows():
 				 country_3 + '\', \'' + empire + '\', \'' + place_1 + \
 				 '\', \'' + place_2 + '\', \'' + place_3 + '\', \'' + \
 				 place_4 + '\', \'' + a_paris + '\', \'' + a_london + \
-				 '\', \'' + a_berlin + '\'),\n'
+				 '\', \'' + a_berlin + '\', \'' + a_petersb + '\', \'' + \
+				 a_stockh + '\', \'' + a_bologna + '\', \'' + acad_7 + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
@@ -421,6 +447,26 @@ for index, row in dataB.iterrows():
 		a_berlin  = a_berlin.replace("'", "\\\'")
 	else:
 		a_berlin  = 'NULL'
+
+	if pd.notna(row['Ac. SP']):
+		a_petersb = str(row['Ac. SP'])
+		a_petersb = a_petersb.replace("'", "\\\'")
+	else:
+		a_petersb  = 'NULL'
+
+	if pd.notna(row['Ac. Stock.']):
+		a_stockh  = str(row['Ac. Stock.'])
+		a_stockh = a_stockh.replace("'", "\\\'")
+	else:
+		a_stockh  = 'NULL'
+
+	if pd.notna(row['Ac. Bol.']):
+		a_bologna = str(row['Ac. Bol.'])
+		a_bologna = a_bologna.replace("'", "\\\'")
+	else:
+		a_bologna = 'NULL'
+
+	acad_7 = 'NULL'
 		
 	printrow  = '(\'' + id_savant + '\', \'B\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -434,7 +480,8 @@ for index, row in dataB.iterrows():
 				 country_3 + '\', \'' + empire + '\', \'' + place_1 + \
 				 '\', \'' + place_2 + '\', \'' + place_3 + '\', \'' + \
 				 place_4 + '\', \'' + a_paris + '\', \'' + a_london + \
-				 '\', \'' + a_berlin + '\'),\n'
+				 '\', \'' + a_berlin + '\', \'' + a_petersb + '\', \'' +\
+				 a_stockh + '\', \'' + a_bologna + '\', \'' + acad_7 + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
