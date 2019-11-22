@@ -43,11 +43,12 @@ printout   = str()
 
 printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"naissance_date, naissance_date_certitude, naissance_date_comment," +\
-	"mort_date, mort_date_certitude, mort_date_comment, naissance_lieu,"+\
+	"mort_date, mort_date_certitude, mort_date_comment, naissance_lieu, "+\
 	"mort_lieu, discipl_1, discipl_2, discipl_3, discipl_4, discipl_5, "+\
-	"nbre_acad, gasc, id_type_eminence, pays_principal,"+\
-	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4, a_paris,"+\
-	"a_londres, a_berlin, a_petersb, a_stockh, a_bologne, acad_7) VALUES\n"
+	"nbre_acad, gasc, id_type_eminence, pays_principal, "+\
+	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4, a_paris, "+\
+	"a_londres, a_berlin, a_petersb, a_stockh, a_bologne, acad_7, acad_8, "+\
+	"acad_9, pos_acad_1, pos_acad_2, prix_1, prix_2, dsb, macmill) VALUES\n"
 
 
 #################
@@ -197,6 +198,7 @@ for index, row in dataA.iterrows():
 		place_4   = place_4.replace("'", "\\\'")
 	else:
 		place_4   = 'NULL'
+
         
 	if pd.notna(row['A. Paris']):
 		a_paris   = str(row['A. Paris'])
@@ -240,6 +242,69 @@ for index, row in dataA.iterrows():
 	else:
 		acad_7    = 'NULL'
 
+	if pd.notna(row['Acad. 8']):
+		acad_8    = str(row['Acad. 8'])
+		acad_8    = acad_8.replace("'", "\\\'")
+	else:
+		acad_8    = 'NULL'
+
+	if pd.notna(row['Acad. 9']):
+		acad_9    = str(row['Acad. 9'])
+		acad_9    = acad_9.replace("'", "\\\'")
+	else:
+		acad_9    = 'NULL'
+
+
+	if pd.notna(row['Pos. acad. 1']):
+		ac_pos_1  = str(row['Pos. acad. 1'])
+		ac_pos_1  = ac_pos_1.replace("'", "\\\'")
+	else:
+		ac_pos_1  = 'NULL'
+
+	if pd.notna(row['Pos. acad. 2']):
+		ac_pos_2  = str(row['Pos. acad. 2'])
+		ac_pos_2  = ac_pos_2.replace("'", "\\\'")
+	else:
+		ac_pos_2  = 'NULL'
+
+
+	if pd.notna(row['Prix 1']):
+		price_1   = str(row['Prix 1'])
+		price_1   = price_1.replace("'", "\\\'")
+	else:
+		price_1   = 'NULL'
+
+	if pd.notna(row['Prix 2']):
+		price_2   = str(row['Prix 2'])
+		price_2   = price_2.replace("'", "\\\'")
+	else:
+		price_2   = 'NULL'
+
+
+	if pd.notna(row['DSB et Macmill.']):
+		dsb_macmil      = str(row['DSB et Macmill.'])
+		dsb_macmil_list = dsb_macmil.replace("//","/").replace(" ","").split("/")
+		dsb             = dsb_macmil_list[0]
+		macmil          = dsb_macmil_list[1]
+
+		if dsb == "oui":
+			dsb_bin = 1
+		elif dsb == "non":
+			dsb_bin = 0
+		else:
+			print("Prob about DSB with ", id_savant, dsb)
+
+		if macmil == "oui":
+			macmil_bin = 1
+		elif macmil == "non":
+			macmil_bin = 0
+		else:
+			print("Prob about Macmillan with ", id_savant, macmil)
+
+	else:
+		dsb_bin = "NULL"
+		macmil_bin = "NULL"
+
 		
 	printrow  = '(\'' + id_savant + '\', \'A\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -254,7 +319,10 @@ for index, row in dataA.iterrows():
 				 '\', \'' + place_2 + '\', \'' + place_3 + '\', \'' + \
 				 place_4 + '\', \'' + a_paris + '\', \'' + a_london + \
 				 '\', \'' + a_berlin + '\', \'' + a_petersb + '\', \'' + \
-				 a_stockh + '\', \'' + a_bologna + '\', \'' + acad_7 + '\'),\n'
+				 a_stockh + '\', \'' + a_bologna + '\', \'' + acad_7 + \
+				 '\', \'' + acad_8 + '\', \'' + acad_9 + '\', \'' + ac_pos_1 +\
+				 '\', \'' + ac_pos_2 + '\', \'' + price_1 + '\', \'' + \
+				 price_2 + '\',' + str(dsb_bin) + ',' + str(macmil_bin) + '),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
@@ -467,6 +535,27 @@ for index, row in dataB.iterrows():
 		a_bologna = 'NULL'
 
 	acad_7 = 'NULL'
+
+	acad_8 = 'NULL'
+
+	acad_9 = 'NULL'
+
+
+	if pd.notna(row['Titre acad.']):
+		ac_pos_1  = str(row['Titre acad.'])
+		ac_pos_1  = ac_pos_1.replace("'", "\\\'")
+	else:
+		ac_pos_1    = 'NULL'
+
+	ac_pos_2 = 'NULL'
+
+
+	price_1  = 'NULL'
+
+	price_2  = 'NULL'
+
+	dsb      = 'NULL'
+	macmil   = 'NULL'
 		
 	printrow  = '(\'' + id_savant + '\', \'B\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -481,7 +570,10 @@ for index, row in dataB.iterrows():
 				 '\', \'' + place_2 + '\', \'' + place_3 + '\', \'' + \
 				 place_4 + '\', \'' + a_paris + '\', \'' + a_london + \
 				 '\', \'' + a_berlin + '\', \'' + a_petersb + '\', \'' +\
-				 a_stockh + '\', \'' + a_bologna + '\', \'' + acad_7 + '\'),\n'
+				 a_stockh + '\', \'' + a_bologna + '\', \'' + acad_7 + \
+				 '\', \'' + acad_8 + '\', \'' + acad_9 + '\', \'' + ac_pos_1 +\
+				 '\', \'' + ac_pos_2 + '\', \'' + price_1 + '\', \'' + \
+				 price_2 + '\', \'' + dsb + '\', \'' + macmil + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
