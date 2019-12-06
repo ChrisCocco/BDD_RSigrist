@@ -48,7 +48,8 @@ printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"nbre_acad, gasc, id_type_eminence, pays_principal, "+\
 	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4, a_paris, "+\
 	"a_londres, a_berlin, a_petersb, a_stockh, a_bologne, acad_7, acad_8, "+\
-	"acad_9, pos_acad_1, pos_acad_2, prix_1, prix_2, dsb, macmill) VALUES\n"
+	"acad_9, pos_acad_1, pos_acad_2, prix_1, prix_2, dsb, macmill, remarques,"+\
+	"source_1 ) VALUES\n"
 
 
 #################
@@ -305,6 +306,18 @@ for index, row in dataA.iterrows():
 		dsb_bin = "NULL"
 		macmil_bin = "NULL"
 
+	if pd.notna(row['Remarques']):
+		comment = str(row['Remarques'])
+		comment = comment.replace("'", "\\\'")
+	else:
+		comment = 'NULL'
+
+	source_1 = str(row['Source 1'])
+	if source_1 == 'nan':
+		source_1 = 'NULL'
+	elif re.match('-{3,}', source_1):
+		source_1 = 'Non disponible' # OR "Source muette"??????
+
 		
 	printrow  = '(\'' + id_savant + '\', \'A\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -322,7 +335,8 @@ for index, row in dataA.iterrows():
 				 a_stockh + '\', \'' + a_bologna + '\', \'' + acad_7 + \
 				 '\', \'' + acad_8 + '\', \'' + acad_9 + '\', \'' + ac_pos_1 +\
 				 '\', \'' + ac_pos_2 + '\', \'' + price_1 + '\', \'' + \
-				 price_2 + '\',' + str(dsb_bin) + ',' + str(macmil_bin) + '),\n'
+				 price_2 + '\',' + str(dsb_bin) + ',' + str(macmil_bin) + \
+				 ',\'' + comment + '\', \'' + source_1 + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
@@ -556,6 +570,19 @@ for index, row in dataB.iterrows():
 
 	dsb      = 'NULL'
 	macmil   = 'NULL'
+
+	if pd.notna(row['Remarques']):
+		comment = str(row['Remarques'])
+		comment = comment.replace("'", "\\\'")
+		comment = comment.replace(u'\x96', u"-")
+	else:
+		comment = 'NULL'
+
+	source_1 = str(row['Source 1'])
+	if source_1 == 'nan':
+		source_1 = 'NULL'
+	elif re.match('-{3,}', source_1):
+		source_1 = 'Non disponible' # OR "Source muette"??????
 		
 	printrow  = '(\'' + id_savant + '\', \'B\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -573,7 +600,8 @@ for index, row in dataB.iterrows():
 				 a_stockh + '\', \'' + a_bologna + '\', \'' + acad_7 + \
 				 '\', \'' + acad_8 + '\', \'' + acad_9 + '\', \'' + ac_pos_1 +\
 				 '\', \'' + ac_pos_2 + '\', \'' + price_1 + '\', \'' + \
-				 price_2 + '\', \'' + dsb + '\', \'' + macmil + '\'),\n'
+				 price_2 + '\', \'' + dsb + '\', \'' + macmil + '\',\'' + \
+				 comment + '\', \'' + source_1 + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
