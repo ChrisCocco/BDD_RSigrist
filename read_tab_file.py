@@ -49,7 +49,7 @@ printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4, a_paris, "+\
 	"a_londres, a_berlin, a_petersb, a_stockh, a_bologne, acad_7, acad_8, "+\
 	"acad_9, pos_acad_1, pos_acad_2, prix_1, prix_2, dsb, macmill, remarques,"+\
-	"source_1 ) VALUES\n"
+	"source_1, source_2, source_3, source_4, source_5 ) VALUES\n"
 
 
 #################
@@ -313,10 +313,24 @@ for index, row in dataA.iterrows():
 		comment = 'NULL'
 
 	source_1 = str(row['Source 1'])
-	if source_1 == 'nan':
+	if source_1 == 'nan'or re.match('-{3,}', source_1):
 		source_1 = 'NULL'
-	elif re.match('-{3,}', source_1):
-		source_1 = 'Non disponible' # OR "Source muette"??????
+
+	source_2 = str(row['Source 2'])
+	if source_2 == 'nan'or re.match('-{3,}', source_2):
+		source_2 = 'NULL'
+
+	source_3 = str(row['Source 3'])
+	if source_3 == 'nan'or re.match('-{3,}', source_3):
+		source_3 = 'NULL'
+
+	source_4 = str(row['Source 4'])
+	if source_4 == 'nan'or re.match('-{3,}', source_4):
+		source_4 = 'NULL'
+
+	source_5 = str(row['Source 5'])
+	if source_5 == 'nan'or re.match('-{3,}', source_5):
+		source_5 = 'NULL'
 
 		
 	printrow  = '(\'' + id_savant + '\', \'A\',\'' + name + '\', \'' +\
@@ -336,7 +350,9 @@ for index, row in dataA.iterrows():
 				 '\', \'' + acad_8 + '\', \'' + acad_9 + '\', \'' + ac_pos_1 +\
 				 '\', \'' + ac_pos_2 + '\', \'' + price_1 + '\', \'' + \
 				 price_2 + '\',' + str(dsb_bin) + ',' + str(macmil_bin) + \
-				 ',\'' + comment + '\', \'' + source_1 + '\'),\n'
+				 ',\'' + comment + '\', \'' + source_1 + '\', \'' + source_2 +\
+				 '\', \'' + source_3 + '\', \'' + source_4 + '\', \'' +\
+				 source_5 + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
@@ -579,10 +595,24 @@ for index, row in dataB.iterrows():
 		comment = 'NULL'
 
 	source_1 = str(row['Source 1'])
-	if source_1 == 'nan':
+	if source_1 == 'nan' or re.match('-{3,}', source_1):
 		source_1 = 'NULL'
-	elif re.match('-{3,}', source_1):
-		source_1 = 'Non disponible' # OR "Source muette"??????
+
+	source_2 = str(row['Source 2'])
+	if source_2 == 'nan'or re.match('-{3,}', source_2):
+		source_2 = 'NULL'
+
+	source_3 = str(row['Source 3'])
+	if source_3 == 'nan'or re.match('-{3,}', source_3):
+		source_3 = 'NULL'
+
+	source_4 = str(row['Source 4'])
+	if source_4 == 'nan'or re.match('-{3,}', source_4):
+		source_4 = 'NULL'
+
+	source_5 = str(row['Source 5'])
+	if source_5 == 'nan'or re.match('-{3,}', source_5):
+		source_5 = 'NULL'
 		
 	printrow  = '(\'' + id_savant + '\', \'B\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -601,7 +631,9 @@ for index, row in dataB.iterrows():
 				 '\', \'' + acad_8 + '\', \'' + acad_9 + '\', \'' + ac_pos_1 +\
 				 '\', \'' + ac_pos_2 + '\', \'' + price_1 + '\', \'' + \
 				 price_2 + '\', \'' + dsb + '\', \'' + macmil + '\',\'' + \
-				 comment + '\', \'' + source_1 + '\'),\n'
+				 comment + '\', \'' + source_1 + '\', \'' + source_2 +\
+				 '\', \'' + source_3 + '\', \'' + source_4 + '\', \'' +\
+				 source_5 + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
