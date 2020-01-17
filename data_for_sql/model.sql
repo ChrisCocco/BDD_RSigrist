@@ -1,4 +1,3 @@
--- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
 DROP TABLE `Rel_champs_savants`;
@@ -19,15 +18,25 @@ DROP TABLE `Type_eminence`;
 DROP TABLE `Champs`;
 
 
+DROP TABLE `Correspondances`;
 
--- ************************************** `Type_lien`
 
-CREATE TABLE `Type_lien`
+
+-- ************************************** `Rel_champs_savants`
+
+CREATE TABLE `Rel_champs_savants`
 (
- `id_type_lien` tinyint NOT NULL COMMENT 'Identifiant du type de lien entre les savants' ,
- `type_lien`    varchar(45) NOT NULL COMMENT 'Type de lien entre les savants' ,
+ `type_savant`     char(1) NOT NULL COMMENT 'Type de savant' ,
+ `id_savant`       integer NOT NULL COMMENT 'Identifiant du savant' ,
+ `id_champ`        tinyint unsigned NOT NULL COMMENT 'Identifiant du champ de travail du savant' ,
+ `champ_interpret` binary(1) NOT NULL COMMENT 'Est-ce une interprétation personnelle du champ scientifique (1) ou est-ce que ça vient d’un dictionnaire (0) ?' ,
+ `champ_principal` binary(1) NOT NULL COMMENT 'Est-ce le champ principal de ce savant ?' ,
 
-PRIMARY KEY (`id_type_lien`)
+PRIMARY KEY (`type_savant`, `id_savant`, `id_champ`),
+KEY `fkIdx_187` (`id_savant`, `type_savant`),
+CONSTRAINT `FK_187` FOREIGN KEY `fkIdx_187` (`id_savant`, `type_savant`) REFERENCES `Savants` (`id_savant`, `type_savant`),
+KEY `fkIdx_199` (`id_champ`),
+CONSTRAINT `FK_199` FOREIGN KEY `fkIdx_199` (`id_champ`) REFERENCES `Champs` (`id_champ`)
 );
 
 
@@ -35,31 +44,27 @@ PRIMARY KEY (`id_type_lien`)
 
 
 
--- ************************************** `Type_eminence`
+-- ************************************** `Liens`
 
-CREATE TABLE `Type_eminence`
+CREATE TABLE `Liens`
 (
- `id_type_eminence` tinyint unsigned NOT NULL COMMENT 'Identifiant du type d''éminence' ,
- `type_eminence`    varchar(3) NOT NULL COMMENT 'Type d''éminence du savant pouvant prendre quatre valeurs: AAA, AA, A ou B.' ,
+ `id_lien`           integer unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifiant du lien' ,
+ `id_savant`         integer NOT NULL COMMENT 'Numéro id du premier savant' ,
+ `type_savant`       char(1) NOT NULL COMMENT 'Type du premier savant (A ou B)' ,
+ `id_savant_1`       integer NOT NULL COMMENT 'Numéro id du second savant' ,
+ `type_savant_1`     char(1) NOT NULL COMMENT 'Type du second savant (A ou B)' ,
+ `id_type_lien`      tinyint NOT NULL COMMENT 'Lien entre le premier savant et le second savant, tel que le second savant est le … du premier savant' ,
+ `type_lien_comment` varchar(45) NULL COMMENT 'Information supplémentaire sur le lien' ,
+ `lien_intensite`    tinyint NOT NULL COMMENT 'Intensité du lien, allant de 1 à 4' ,
 
-PRIMARY KEY (`id_type_eminence`)
+PRIMARY KEY (`id_lien`),
+KEY `fkIdx_168` (`id_type_lien`),
+CONSTRAINT `FK_168` FOREIGN KEY `fkIdx_168` (`id_type_lien`) REFERENCES `Type_lien` (`id_type_lien`),
+KEY `fkIdx_65` (`id_savant`, `type_savant`),
+CONSTRAINT `FK_65` FOREIGN KEY `fkIdx_65` (`id_savant`, `type_savant`) REFERENCES `Savants` (`id_savant`, `type_savant`),
+KEY `fkIdx_69` (`id_savant_1`, `type_savant_1`),
+CONSTRAINT `FK_69` FOREIGN KEY `fkIdx_69` (`id_savant_1`, `type_savant_1`) REFERENCES `Savants` (`id_savant`, `type_savant`)
 );
-
-
-
-
-
-
--- ************************************** `Champs`
-
-CREATE TABLE `Champs`
-(
- `id_champ` tinyint unsigned NOT NULL COMMENT 'Identifiant du champ' ,
- `champ`    varchar(40) NOT NULL COMMENT 'Champ de travail du savant (équivalent à la catégorie DSB pour les savants de type A)' ,
-
-PRIMARY KEY (`id_champ`)
-);
-
 
 
 
@@ -127,24 +132,40 @@ CONSTRAINT `FK_175` FOREIGN KEY `fkIdx_175` (`id_type_eminence`) REFERENCES `Typ
 
 
 
+-- ************************************** `Type_lien`
 
-
-
--- ************************************** `Rel_champs_savants`
-
-CREATE TABLE `Rel_champs_savants`
+CREATE TABLE `Type_lien`
 (
- `type_savant`     char(1) NOT NULL COMMENT 'Type de savant' ,
- `id_savant`       integer NOT NULL COMMENT 'Identifiant du savant' ,
- `id_champ`        tinyint unsigned NOT NULL COMMENT 'Identifiant du champ de travail du savant' ,
- `champ_interpret` binary(1) NOT NULL COMMENT 'Est-ce une interprétation personnelle du champ scientifique (1) ou est-ce que ça vient d’un dictionnaire (0) ?' ,
- `champ_principal` binary(1) NOT NULL COMMENT 'Est-ce le champ principal de ce savant ?' ,
+ `id_type_lien` tinyint NOT NULL COMMENT 'Identifiant du type de lien entre les savants' ,
+ `type_lien`    varchar(45) NOT NULL COMMENT 'Type de lien entre les savants' ,
 
-PRIMARY KEY (`type_savant`, `id_savant`, `id_champ`),
-KEY `fkIdx_187` (`id_savant`, `type_savant`),
-CONSTRAINT `FK_187` FOREIGN KEY `fkIdx_187` (`id_savant`, `type_savant`) REFERENCES `Savants` (`id_savant`, `type_savant`),
-KEY `fkIdx_199` (`id_champ`),
-CONSTRAINT `FK_199` FOREIGN KEY `fkIdx_199` (`id_champ`) REFERENCES `Champs` (`id_champ`)
+PRIMARY KEY (`id_type_lien`)
+);
+
+
+
+
+-- ************************************** `Type_eminence`
+
+CREATE TABLE `Type_eminence`
+(
+ `id_type_eminence` tinyint unsigned NOT NULL COMMENT 'Identifiant du type d''éminence' ,
+ `type_eminence`    varchar(3) NOT NULL COMMENT 'Type d''éminence du savant pouvant prendre quatre valeurs: AAA, AA, A ou B.' ,
+
+PRIMARY KEY (`id_type_eminence`)
+);
+
+
+
+
+-- ************************************** `Champs`
+
+CREATE TABLE `Champs`
+(
+ `id_champ` tinyint unsigned NOT NULL COMMENT 'Identifiant du champ' ,
+ `champ`    varchar(40) NOT NULL COMMENT 'Champ de travail du savant (équivalent à la catégorie DSB pour les savants de type A)' ,
+
+PRIMARY KEY (`id_champ`)
 );
 
 
@@ -152,27 +173,24 @@ CONSTRAINT `FK_199` FOREIGN KEY `fkIdx_199` (`id_champ`) REFERENCES `Champs` (`i
 
 
 
--- ************************************** `Liens`
+-- ************************************** `Correspondances`
 
-CREATE TABLE `Liens`
+CREATE TABLE `Correspondances`
 (
- `id_lien`           integer NOT NULL COMMENT 'Identifiant du lien' ,
- `id_savant`         integer NOT NULL COMMENT 'Numéro id du premier savant' ,
- `type_savant`       char(1) NOT NULL COMMENT 'Type du premier savant (A ou B)' ,
- `id_savant_1`       integer NOT NULL COMMENT 'Numéro id du second savant' ,
- `type_savant_1`     char(1) NOT NULL COMMENT 'Type du second savant (A ou B)' ,
- `id_type_lien`      tinyint NOT NULL COMMENT 'Lien entre le premier savant et le second savant, tel que le second savant est le … du premier savant' ,
- `type_lien_comment` varchar(45) NULL COMMENT 'Information supplémentaire sur le lien' ,
- `lien_intensite`    tinyint NOT NULL COMMENT 'Intensité du lien, allant de 1 à 4' ,
+ `id_corresp`        integer unsigned NOT NULL AUTO_INCREMENT ,
+ `id_savant`         integer NOT NULL ,
+ `type_savant`       char(1) NOT NULL ,
+ `id_savant_1`       integer NOT NULL ,
+ `type_savant_1`     char(1) NOT NULL ,
+ `corresp_intensite` tinyint NOT NULL COMMENT 'Intensité des correspondances (en fonction du nombre de lettres échangées)' ,
 
-PRIMARY KEY (`id_lien`),
-KEY `fkIdx_168` (`id_type_lien`),
-CONSTRAINT `FK_168` FOREIGN KEY `fkIdx_168` (`id_type_lien`) REFERENCES `Type_lien` (`id_type_lien`),
-KEY `fkIdx_65` (`id_savant`, `type_savant`),
-CONSTRAINT `FK_65` FOREIGN KEY `fkIdx_65` (`id_savant`, `type_savant`) REFERENCES `Savants` (`id_savant`, `type_savant`),
-KEY `fkIdx_69` (`id_savant_1`, `type_savant_1`),
-CONSTRAINT `FK_69` FOREIGN KEY `fkIdx_69` (`id_savant_1`, `type_savant_1`) REFERENCES `Savants` (`id_savant`, `type_savant`)
-);
+PRIMARY KEY (`id_corresp`),
+KEY `fkIdx_206` (`id_savant`, `type_savant`),
+CONSTRAINT `FK_206` FOREIGN KEY `fkIdx_206` (`id_savant`, `type_savant`) REFERENCES `Savants` (`id_savant`, `type_savant`),
+KEY `fkIdx_210` (`id_savant_1`, `type_savant_1`),
+CONSTRAINT `FK_210` FOREIGN KEY `fkIdx_210` (`id_savant_1`, `type_savant_1`) REFERENCES `Savants` (`id_savant`, `type_savant`)
+) COMMENT='Correspondances entre les savants (basées sur les échanges de lettres)';
+
 
 
 

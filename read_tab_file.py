@@ -49,7 +49,7 @@ printout = "INSERT INTO Savants (id_savant, type_savant, nom, prenom, " +\
 	"pays_2, pays_3, empire, lieu_1, lieu_2, lieu_3, lieu_4, a_paris, "+\
 	"a_londres, a_berlin, a_petersb, a_stockh, a_bologne, acad_7, acad_8, "+\
 	"acad_9, pos_acad_1, pos_acad_2, prix_1, prix_2, dsb, macmill, remarques,"+\
-	"source_1, source_2, source_3, source_4, source_5 ) VALUES\n"
+	"source_1, source_2, source_3, source_4, source_5, equipement ) VALUES\n"
 
 
 #################
@@ -182,20 +182,20 @@ for index, row in dataA.iterrows():
 	else:
 		place_1   = 'NULL'
 
-	if pd.notna(row['Lieu 2']):
-		place_2   = str(row['Lieu 2'])
+	place_2 = str(row['Lieu 2'])
+	if place_2 != "nan" and not re.match('-{3,}', place_2):
 		place_2   = place_2.replace("'", "\\\'")
 	else:
 		place_2   = 'NULL'
 
-	if pd.notna(row['Lieu 3']):
-		place_3   = str(row['Lieu 3'])
+	place_3 = str(row['Lieu 3'])
+	if place_3 != "nan" and not re.match('-{3,}', place_3):
 		place_3   = place_3.replace("'", "\\\'")
 	else:
 		place_3   = 'NULL'
 
-	if pd.notna(row['Lieu 4']):
-		place_4   = str(row['Lieu 4'])
+	place_4 = str(row['Lieu 4'])
+	if place_4 != "nan" and not re.match('-{3,}', place_4):
 		place_4   = place_4.replace("'", "\\\'")
 	else:
 		place_4   = 'NULL'
@@ -332,6 +332,13 @@ for index, row in dataA.iterrows():
 	if source_5 == 'nan'or re.match('-{3,}', source_5):
 		source_5 = 'NULL'
 
+
+	if pd.notna(row['Equipement']):
+		equipment = str(row['Equipement'])
+		equipment = equipment.replace("'", "\\\'")
+	else:
+		equipment = 'NULL'
+
 		
 	printrow  = '(\'' + id_savant + '\', \'A\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -352,7 +359,7 @@ for index, row in dataA.iterrows():
 				 price_2 + '\',' + str(dsb_bin) + ',' + str(macmil_bin) + \
 				 ',\'' + comment + '\', \'' + source_1 + '\', \'' + source_2 +\
 				 '\', \'' + source_3 + '\', \'' + source_4 + '\', \'' +\
-				 source_5 + '\'),\n'
+				 source_5 + '\', \'' + equipment + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
@@ -509,24 +516,21 @@ for index, row in dataB.iterrows():
 			re.split(r'& (?=[A-Z])|; (?=[A-Z])|@ (?=[A-Z])', place_3_temp)
 			)
 
-	if len(places) == 0:
-		place_1 = place_2 = place_3 = place_4 = 'NULL'
-	else:
+	if len(places) != 0:
 		place_1 = places[0]
 		place_1   = place_1.replace("'", "\\\'")
-		if len(places) > 1:
+		if len(places) > 1 and not re.match('-{3,}', places[1]):
 			place_2 = places[1]
 			place_2   = place_2.replace("'", "\\\'")
-			if len(places) > 2:
+			if len(places) > 2 and not re.match('-{3,}', places[2]):
 				place_3 = places[2]
 				place_3   = place_3.replace("'", "\\\'")
-				if len(places) > 3:
+				if len(places) > 3 and not re.match('-{3,}', places[3]):
 					place_4 = places[3]
 					place_4   = place_4.replace("'", "\\\'")
-					if len(places) > 4:
+					if len(places) > 4 and not re.match('-{3,}', places[4]):
 						print(id_savant, "B: There are too many places")
 
-	#NOT SOLVED FOR PLACES: Remove "----", must be replaced by "NULL" or NOT?
 
 	if pd.notna(row['Ac. Paris']):
 		a_paris   = str(row['Ac. Paris'])
@@ -613,6 +617,10 @@ for index, row in dataB.iterrows():
 	source_5 = str(row['Source 5'])
 	if source_5 == 'nan'or re.match('-{3,}', source_5):
 		source_5 = 'NULL'
+
+
+	equipment = 'NULL'
+
 		
 	printrow  = '(\'' + id_savant + '\', \'B\',\'' + name + '\', \'' +\
 				 firstname + '\',' + born_date + ',' + born_date_cert + ',\''+\
@@ -633,7 +641,7 @@ for index, row in dataB.iterrows():
 				 price_2 + '\', \'' + dsb + '\', \'' + macmil + '\',\'' + \
 				 comment + '\', \'' + source_1 + '\', \'' + source_2 +\
 				 '\', \'' + source_3 + '\', \'' + source_4 + '\', \'' +\
-				 source_5 + '\'),\n'
+				 source_5 + '\', \'' + equipment + '\'),\n'
 
 	printrow  = printrow.replace("'NULL'", "NULL")
 
