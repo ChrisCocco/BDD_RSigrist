@@ -14,6 +14,16 @@ dfsB = pd.read_html('DATA/CorresB.htm', header = 0)
 dataA = dfsA[0]
 dataB = dfsB[0]
 
+list_id_savants = []
+with open('data_for_sql/savants.sql', 'r') as sqlfile:
+	for line in sqlfile:
+		if line.lower().startswith('insert'):
+			continue
+		else:
+			id_savants = re.match('\(\'(.+?)\', \'(.+?)\',.+', line) 
+			list_id_savants.append((id_savants.group(1), id_savants.group(2)))
+
+
 printout   = str()
 
 printout = "INSERT INTO Correspondances (id_savant, type_savant, id_savant_1, " +\
@@ -43,7 +53,7 @@ for index, row in dataA.iterrows():
 				else:
 					print(index, corr)
 
-				if int(id_sav_2) == 2053 or int(id_sav_2) == 1823 or int(id_sav_2) == 2023 or int(id_sav_2) == 1939:
+				if (id_sav_2,type_sav_2) not in list_id_savants:
 					continue
 				
 				printrow  = string_print(id_sav, type_sav, 
@@ -64,7 +74,7 @@ for index, row in dataA.iterrows():
 				else:
 					print(index, corr)
 
-				if int(id_sav_2) == 4796:
+				if (id_sav_2,type_sav_2) not in list_id_savants:
 					continue
 
 				printrow  = string_print(id_sav, type_sav, 
@@ -84,6 +94,9 @@ for index, row in dataA.iterrows():
 				else:
 					print(index,row['Autres corr. A'])
 
+				if (id_sav_2,type_sav_2) not in list_id_savants:
+					continue
+
 				printrow  = string_print(id_sav, type_sav, 
 					id_sav_2, type_sav_2, weight)
 
@@ -100,6 +113,9 @@ for index, row in dataA.iterrows():
 					type_sav_2 = "B"
 				else:
 					print(index,row['Autres corr. B'])
+
+				if (id_sav_2,type_sav_2) not in list_id_savants:
+					continue
 
 				printrow  = string_print(id_sav, type_sav, 
 					id_sav_2, type_sav_2, weight)
@@ -130,6 +146,9 @@ for index, row in dataB.iterrows():
 				else:
 					print(index, corr)
 
+				if (id_sav_2,type_sav_2) not in list_id_savants:
+					continue
+
 				printrow  = string_print(id_sav, type_sav, 
 					id_sav_2, type_sav_2, weight)
 
@@ -148,6 +167,9 @@ for index, row in dataB.iterrows():
 					type_sav_2 = "B"
 				else:
 					print(index, corr)
+
+				if (id_sav_2,type_sav_2) not in list_id_savants:
+					continue
 
 				printrow  = string_print(id_sav, type_sav, 
 					id_sav_2, type_sav_2, weight)
