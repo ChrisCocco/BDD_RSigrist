@@ -12,7 +12,8 @@ dataA1_base = dfsA1_base[0]
 
 printout   = str()
 
-printout = "INSERT INTO Liens (id_savant, type_savant, id_savant_1, type_savant_1, id_type_lien, lien_intensite)\n"
+printout = "INSERT INTO Liens (id_savant, type_savant, id_savant_1, \
+	type_savant_1, id_type_lien, type_lien_comment, lien_intensite)\n"
 
 
 #################
@@ -27,11 +28,14 @@ for index, row in dataA1_base.iterrows():
 	if pd.notna(row['Maître 1']):
 		savant_1 = str(row['Maître 1'])
 		elements = re.findall('\(.*?\)', savant_1)
+
+		lien_comment = "NULL"
+
 		if elements:
-			# only master with an intensity
+			
 			if len(elements) == 1:
 				id_elements = re.search('no (\d{4})(\-B)?', savant_1)
-
+				# master with only an intensity
 				if re.match('\(\dX\)',elements[0]):
 					
 					if id_elements:
@@ -70,13 +74,7 @@ for index, row in dataA1_base.iterrows():
 
 					if id_elements:
 						id_savant_1 = id_elements.group(1)
-						relation_type_a = str(1)
-						if elements[0] == "(+patron)":
-							relation_type_b = str(3)
-						elif elements[0] == "(+influence)":
-							relation_type_b = str(5)
-						else:
-							print(savant_1)
+						
 						lien_intensite = str(1)
 						# if there is "-B" in the name
 						if id_elements.group(2):
@@ -84,11 +82,52 @@ for index, row in dataA1_base.iterrows():
 						else:
 							type_savant_1 = "A"
 
+						relation_type_a = str(1)
+
+						if elements[0] == "(+patron)":
+							relation_type_b = str(3)
+						elif elements[0] == "(+influence)":
+							relation_type_b = str(5)
+						elif elements[0] == "(+SN)":
+							lien_comment = "succession népotique"
+							printrow  = '(\'' + id_savant +\
+							'\', \'A\',\'' +\
+							id_savant_1 + '\', \'' +\
+							type_savant_1 +\
+							'\', \'' + relation_type_a +\
+							'\', \'' + lien_comment +\
+							'\', \'' + lien_intensite +\
+							'),\n'
+
+							printrow  = printrow.replace("'NULL'", "NULL")
+
+							printout += printrow
+							continue
+
+						elif elements[0] == "(+directeur)":
+							lien_comment = "directeur de thèse"
+							printrow  = '(\'' + id_savant +\
+							'\', \'A\',\'' +\
+							id_savant_1 + '\', \'' +\
+							type_savant_1 +\
+							'\', \'' + relation_type_a +\
+							'\', \'' + lien_comment +\
+							'\', \'' + lien_intensite +\
+							'),\n'
+
+							printrow  = printrow.replace("'NULL'", "NULL")
+
+							printout += printrow
+							continue
+						else:
+							print(savant_1)
+
 						printrow  = '(\'' + id_savant +\
 							'\', \'A\',\'' +\
 							id_savant_1 + '\', \'' +\
 							type_savant_1 +\
 							'\', \'' + relation_type_a +\
+							'\', \'' + lien_comment +\
 							'\', \'' + lien_intensite +\
 							'),\n'
 
@@ -101,6 +140,7 @@ for index, row in dataA1_base.iterrows():
 							id_savant_1 + '\', \'' +\
 							type_savant_1 +\
 							'\', \'' + relation_type_b +\
+							'\', \'' + lien_comment +\
 							'\', \'' + lien_intensite +\
 							'),\n'
 
@@ -113,11 +153,29 @@ for index, row in dataA1_base.iterrows():
 					else:
 						print(savant_1)
 			else:
-				# print("to be continued...")
 				id_savant_1 = "to be continued"
 				type_savant_1 = "to be continued"
 				relation_type = "to be continued"
 				lien_intensite = "to be continued"
+#				id_elements = re.search(
+#					'no (\d{4})(\-B)? ?(\(\dX\))? ?\
+#					(\(\+?.*?\)) ?(\(\dX\))? ?\
+#					((\(\+?.*?\)) ?(\(\dX\))?)?', 
+#					savant_1)
+#				if id_elements:
+#					id_savant_1 = id_elements.group(1)
+#					# if there is "-B" in the name
+#					if id_elements.group(2):
+#						type_savant_1 = "B"
+#					else:
+#						type_savant_1 = "A"
+#					
+#					#if not id_elements.group(6) and 
+#					# print("to be continued...")
+#					relation_type = "to be continued"
+#					lien_intensite = "to be continued"
+#				else:
+#					print(savant_1)
 		else:
 			id_elements = re.search('no (\d{4})(\-B)?', savant_1)
 			if id_elements:
@@ -134,7 +192,7 @@ for index, row in dataA1_base.iterrows():
 
 		# check if savant_1 is in the savants of the current database
 
-		printrow  = '(\'' + id_savant + '\', \'A\',\'' + id_savant_1 + '\', \'' + type_savant_1 + '\', \'' + relation_type + '\', \'' + lien_intensite + '),\n'
+		printrow  = '(\'' + id_savant + '\', \'A\',\'' + id_savant_1 + '\', \'' + type_savant_1 + '\', \'' + relation_type + '\', \'' + lien_comment + '\', \'' + lien_intensite + '),\n'
 
 		printrow  = printrow.replace("'NULL'", "NULL")
 
@@ -142,6 +200,6 @@ for index, row in dataA1_base.iterrows():
 
 	
 
-print(printout)
+#print(printout)
 #with open("data_for_sql/liens.sql", mode = "w", encoding = "utf8") as f: #mode "a" for the followings
 #	f.write(printout[:-2]) #-2 to remove the last ",\n"
