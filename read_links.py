@@ -9,6 +9,7 @@ dataA1_base = dfsA1_base[0]
 
 
 
+log = str()
 
 printout   = str()
 
@@ -48,7 +49,7 @@ for index, row in dataA1_base.iterrows():
 						else:
 							type_savant_1 = "A" 
 					else:
-						print(savant_1)
+						log += savant_1 + "\n"
 
 				elif not re.match('\(\+.*\)',elements[0]):
 
@@ -59,6 +60,8 @@ for index, row in dataA1_base.iterrows():
 							relation_type = str(3)
 						elif elements[0] == "(influence)":
 							relation_type = str(5)
+						elif elements[0] == "(directeur)":
+							lien_comment = "succession népotique"
 						else:
 							print(savant_1)
 						lien_intensite = str(1)
@@ -68,7 +71,7 @@ for index, row in dataA1_base.iterrows():
 						else:
 							type_savant_1 = "A" 
 					else:
-						print(savant_1)
+						log += savant_1 + "\n"
 
 				else:
 
@@ -84,9 +87,11 @@ for index, row in dataA1_base.iterrows():
 
 						relation_type_a = str(1)
 
-						if elements[0] == "(+patron)":
+						if (elements[0] == "(+patron)" or 
+						    elements[0] == "(+ patron)"):
 							relation_type_b = str(3)
-						elif elements[0] == "(+influence)":
+						elif (elements[0] == "(+influence)" or
+						      elements[0] == "(+ influence)"):
 							relation_type_b = str(5)
 						elif elements[0] == "(+SN)":
 							lien_comment = "succession népotique"
@@ -120,7 +125,7 @@ for index, row in dataA1_base.iterrows():
 							printout += printrow
 							continue
 						else:
-							print(savant_1)
+							log += savant_1 + "\n"
 
 						printrow  = '(\'' + id_savant +\
 							'\', \'A\',\'' +\
@@ -151,31 +156,31 @@ for index, row in dataA1_base.iterrows():
 						continue
 						
 					else:
-						print(savant_1)
+						log += savant_1 + "\n"
 			else:
-				id_savant_1 = "to be continued"
-				type_savant_1 = "to be continued"
-				relation_type = "to be continued"
-				lien_intensite = "to be continued"
-#				id_elements = re.search(
-#					'no (\d{4})(\-B)? ?(\(\dX\))? ?\
-#					(\(\+?.*?\)) ?(\(\dX\))? ?\
-#					((\(\+?.*?\)) ?(\(\dX\))?)?', 
-#					savant_1)
-#				if id_elements:
-#					id_savant_1 = id_elements.group(1)
-#					# if there is "-B" in the name
-#					if id_elements.group(2):
-#						type_savant_1 = "B"
-#					else:
-#						type_savant_1 = "A"
-#					
-#					#if not id_elements.group(6) and 
-#					# print("to be continued...")
-#					relation_type = "to be continued"
-#					lien_intensite = "to be continued"
-#				else:
-#					print(savant_1)
+				print(savant_1)
+
+				id_elements = re.search(
+					'no (\d{4})(\-B)? ?(\(\dX\))? ?'
+					'(\(\+?.*?\)) ?(\(\dX\))? ?'
+					'((\(\+?.*?\)) ?(\(\dX\))?)?', 
+					savant_1)
+
+				if id_elements:
+					id_savant_1 = id_elements.group(1)
+					# if there is "-B" in the name
+					if id_elements.group(2):
+						type_savant_1 = "B"
+					else:
+						type_savant_1 = "A"
+					
+					#if not id_elements.group(6) and 
+					# print("to be continued...")
+					relation_type = "to be continued"
+					lien_intensite = "to be continued"
+					#need a else for log for other such as Fourcroy, no 0457 (2X) (+patron: 3X) 
+				else:
+					log += savant_1 + "\n"
 		else:
 			id_elements = re.search('no (\d{4})(\-B)?', savant_1)
 			if id_elements:
@@ -188,7 +193,7 @@ for index, row in dataA1_base.iterrows():
 				else:
 					type_savant_1 = "A" 
 			else:
-				print(savant_1)
+				log += savant_1 + "\n"
 
 		# check if savant_1 is in the savants of the current database
 
@@ -200,6 +205,11 @@ for index, row in dataA1_base.iterrows():
 
 	
 
+# what to do with "+A"
+
 #print(printout)
 #with open("data_for_sql/liens.sql", mode = "w", encoding = "utf8") as f: #mode "a" for the followings
 #	f.write(printout[:-2]) #-2 to remove the last ",\n"
+
+#print(log)
+#do a log file
