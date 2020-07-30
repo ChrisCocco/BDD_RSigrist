@@ -63,7 +63,7 @@ for index, row in dataA1_base.iterrows():
 						elif elements[0] == "(directeur)":
 							lien_comment = "succession népotique"
 						else:
-							print(savant_1)
+							log += savant_1 + "\n"
 						lien_intensite = str(1)
 						# if there is "-B" in the name
 						if id_elements.group(2):
@@ -174,11 +174,184 @@ for index, row in dataA1_base.iterrows():
 					else:
 						type_savant_1 = "A"
 					
-					#if not id_elements.group(6) and 
-					# print("to be continued...")
-					relation_type = "to be continued"
-					lien_intensite = "to be continued"
-					#need a else for log for other such as Fourcroy, no 0457 (2X) (+patron: 3X) 
+					if (not id_elements.group(6) and
+					    not re.match('\(\+.*\)',id_elements.group(4))):
+						if id_elements.group(4) == "(patron)":
+							relation_type = str(3)
+						elif id_elements.group(4) == "(influence)":
+							relation_type = str(5)
+						elif id_elements.group(4) == "(directeur)":
+							lien_comment = "directeur de thèse"
+							relation_type = str(1)
+						else:
+							log += savant_1 + "\n"
+
+						if id_elements.group(5):
+							lien_intensite = re.search('\d', id_elements.group(5)).group(0)
+						else:
+							lien_intensite = str(1)
+
+					elif (not id_elements.group(6) and
+					    re.match('\(\+.*\)',id_elements.group(4))):
+					    
+						# first link
+						relation_type = str(1)
+						if id_elements.group(3):
+							lien_intensite = re.search('\d', id_elements.group(3)).group(0)
+						else:
+							lien_intensite = str(1)
+							
+						#second link
+						if (id_elements.group(4) == "(+patron)" or 
+						    id_elements.group(4) == "(+ patron)"):
+							relation_type_a = str(3)
+						elif (id_elements.group(4) == "(+influence)" or
+						      id_elements.group(4) == "(+ influence)"):
+							relation_type_a = str(5)
+						elif id_elements.group(4) == "(+SN)":
+							lien_comment = "succession népotique"
+							printrow  = '(\'' + id_savant +\
+							'\', \'A\',\'' +\
+							id_savant_1 + '\', \'' +\
+							type_savant_1 +\
+							'\', \'' + relation_type +\
+							'\', \'' + lien_comment +\
+							'\', \'' + lien_intensite +\
+							'),\n'
+
+							printrow  = printrow.replace("'NULL'", "NULL")
+
+							printout += printrow
+							continue
+						elif id_elements.group(4) == "(+directeur)":
+							lien_comment = "directeur de thèse"
+							printrow  = '(\'' + id_savant +\
+							'\', \'A\',\'' +\
+							id_savant_1 + '\', \'' +\
+							type_savant_1 +\
+							'\', \'' + relation_type +\
+							'\', \'' + lien_comment +\
+							'\', \'' + lien_intensite +\
+							'),\n'
+
+							printrow  = printrow.replace("'NULL'", "NULL")
+
+							printout += printrow
+							continue
+						else:
+							log += savant_1 + "\n"
+							
+						if id_elements.group(5):
+							lien_intensite_a = re.search('\d', id_elements.group(5)).group(0)
+						else:
+							lien_intensite_a = str(1)
+						
+						lien_comment_a = "NULL"
+						
+						# print second link	
+						printrow  = '(\'' + id_savant +\
+						'\', \'A\',\'' +\
+						id_savant_1 + '\', \'' +\
+						type_savant_1 +\
+						'\', \'' + relation_type_a +\
+						'\', \'' + lien_comment_a +\
+						'\', \'' + lien_intensite_a +\
+						'),\n'
+
+						printrow  = printrow.replace("'NULL'", "NULL")
+
+						printout += printrow
+						
+					elif (id_elements.group(6) and
+						  not re.match('\(\+.*\)',id_elements.group(4))):
+						print(savant_1)
+					    #first link
+						if id_elements.group(4) == "(patron)":
+							relation_type = str(3)
+						elif id_elements.group(4) == "(influence)":
+							relation_type = str(5)
+						elif id_elements.group(4) == "(directeur)":
+							relation_type = str(1)
+							lien_comment = "succession népotique"
+						else:
+							log += savant_1 + "\n"
+							
+						if id_elements.group(5):
+							lien_intensite = re.search('\d', id_elements.group(5)).group(0)
+						else:
+							lien_intensite = str(1)
+						
+					    #second link
+						if (id_elements.group(7) == "(+patron)" or 
+						    id_elements.group(7) == "(+ patron)"):
+							relation_type_a = str(3)
+						elif (id_elements.group(7) == "(+influence)" or
+						      id_elements.group(7) == "(+ influence)"):
+							relation_type_a = str(5)
+						elif id_elements.group(7) == "(+SN)":
+							lien_comment = "succession népotique"
+							printrow  = '(\'' + id_savant +\
+							'\', \'A\',\'' +\
+							id_savant_1 + '\', \'' +\
+							type_savant_1 +\
+							'\', \'' + relation_type +\
+							'\', \'' + lien_comment +\
+							'\', \'' + lien_intensite +\
+							'),\n'
+
+							printrow  = printrow.replace("'NULL'", "NULL")
+
+							printout += printrow
+							continue
+						elif id_elements.group(7) == "(+directeur)":
+							lien_comment = "directeur de thèse"
+							printrow  = '(\'' + id_savant +\
+							'\', \'A\',\'' +\
+							id_savant_1 + '\', \'' +\
+							type_savant_1 +\
+							'\', \'' + relation_type +\
+							'\', \'' + lien_comment +\
+							'\', \'' + lien_intensite +\
+							'),\n'
+
+							printrow  = printrow.replace("'NULL'", "NULL")
+
+							printout += printrow
+							continue
+						else:
+							log += savant_1 + "\n"
+							
+						if id_elements.group(8):
+							lien_intensite_a = re.search('\d', id_elements.group(8)).group(0)
+						else:
+							lien_intensite_a = str(1)
+						
+						lien_comment_a = "NULL"
+						
+						# print second link	
+						printrow  = '(\'' + id_savant +\
+						'\', \'A\',\'' +\
+						id_savant_1 + '\', \'' +\
+						type_savant_1 +\
+						'\', \'' + relation_type_a +\
+						'\', \'' + lien_comment_a +\
+						'\', \'' + lien_intensite_a +\
+						'),\n'
+
+						printrow  = printrow.replace("'NULL'", "NULL")
+
+						printout += printrow
+						
+					elif (id_elements.group(6) and
+					    re.match('\(\+.*\)',id_elements.group(4))):
+					    print("To be continued...")
+					    #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					    #first link
+					    #second link
+					    #third link
+					    #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					else:
+						log += savant_1 + "\n"
 				else:
 					log += savant_1 + "\n"
 		else:
@@ -207,7 +380,7 @@ for index, row in dataA1_base.iterrows():
 
 # what to do with "+A"
 
-#print(printout)
+print(printout)
 #with open("data_for_sql/liens.sql", mode = "w", encoding = "utf8") as f: #mode "a" for the followings
 #	f.write(printout[:-2]) #-2 to remove the last ",\n"
 
