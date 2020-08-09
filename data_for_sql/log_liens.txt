@@ -1,14 +1,45 @@
 0186 : Cooper, A., no 1374 (+ directeur) (2X)
+0299 : d'Alembert, no 0023 (dir. thèse)
+0299 : Clairaut, no 0277 (dir. thèse)
+0389 : Pictet, no 973
+0530 : Descartes, no (influence)
 0601 : Higgins, B., no 0600 (+influence; + patron)
+0645 : Ptolémée (influence)
+0645 : Euclide (influence)
 0658 : Jussieu, A.-L., no 0660 (+ inflence) (+SN)
 0758 : Duvernoy, no 1385 (+assistant)
 0765 : Heuland, no 000
+0770 : Boerhaave, no 0137 (+dir. thèse)
+0901 : Newton, no 0913 (+influence: 2X)
+0913 : FICHIER filiations intellect. !
 0993 : Laplace, no 0728 (+inflence) (2X); (+patron)
 1005 : Stahl, no 1182 (+ patron) (+infuence)
 1013 : Girard, Ph. H. de
 1043 : Woltman, no 1329 (2X) (+A)
 1136 : Yositane Takahara
+1136 : Sigeyosi Mori (influence)
+1136 : Masaoki Sato (influence)
 1184 : Gauss, no 0492 (2X (+patron)
 1186 : Bessel, no 0113 (+directeur thèse) (2X)
 1258 : Fourcroy, no 0457 (2X) (+patron: 3X)
+1268 : Torricelli, DSB
 1400 : Boerhaave, no 0137 (+patron) (+inflence)
+2589 : Stefan, no 3373 (2X) +A (+patron)
+2607 : Hertz, Heinrich (1857-1894) (influence)
+2636 : Zinin, no 3507 (+infl.) @ Bunsen, no 2632
+2636 : Couper, no 2685 (infl.) @ Mitscherlich, no 0862
+2642 : Avogadro, no 0047 (infuence)
+2798 : Encke, no 0416 (2X) +A (+influence)
+2804 : Deville, no (patron)
+3011 : Taylor, F. W. (1856-1915), DSB (infl.)
+3097 : Bunsen, no 2632 @ Prout, no 1022 (infl.)
+3268 : Hertz (1857-1894) (influence)
+3315 : Argelander, no 0036 (2X) +A (+influence)
+3328 : Naegeli, no 3328 (+A)
+3368 : Oken, no
+3370 : Prout, no 1022 (nfluence)
+3378 : Hertz, Heinrich (1857-1894) (influence)
+3423 : Saint-Hilaire, A., no 1092 (A)
+3489 : van't Hoff, DSB (influence)
+3523 : Zittel, no 3509 (+infuence) +A
+3570 : Duméril, C., no 0396 (2X) (+infl.) +A
