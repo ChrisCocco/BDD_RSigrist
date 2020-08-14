@@ -5,7 +5,7 @@ Cette "nouvelle" base de données, en l'état à la date du 14 août 2020, a ét
 Pour accéder et/ou citer ce dépôt:
 
 > Sigrist, R. (2020), Base de données sur les savants de la période 1700-1870 [Dataset]. 
-Zenodo. DOI:[10.5281/zenodo.3956437](https://doi.org/0.5281/zenodo.3956437).
+Zenodo. DOI:[10.5281/zenodo.3956437](https://doi.org/10.5281/zenodo.3956437).
 
 Pour citer cette base de données dans sa forme d'origine (en FileMaker Pro):
 
