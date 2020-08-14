@@ -26,7 +26,7 @@ Cette migration fait partie du projet [*Promoting Knowledge.
 The Origins of the Science System and the Making of Professional Structures in
 European States, 1700-1870*](http://p3.snf.ch/Project-166345) financé par le Fonds National Suisse de la Recherche Scientifique (n° 166345).
 
-Créateur de la base de données et collecte des données: René Sigrist.
+Créateur de la base de données et collecte des données: René Sigrist
 
 Chef de projet: Dominique Vinck
 
