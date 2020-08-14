@@ -16,7 +16,9 @@ Pour citer cette base de données dans sa forme d'origine (en FileMaker Pro):
 
 - Les données exportées de FileMaker Pro en html (dossier [`DATA`](/DATA))
 - Les codes pour migrer les données des fichiers en html vers SQL
-- Les données en SQL, ainsi que le modèle relationnel (dossier [`data_for_sql`](/data_for_sql)
+- Les données en SQL, ainsi que le modèle relationnel (dossier [`data_for_sql`](/data_for_sql))
+
+![Modèle relationnel](model_BDD.png)
 
 ## Crédits
 
